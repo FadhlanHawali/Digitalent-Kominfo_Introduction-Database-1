@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-generic/config"
+	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-orm/database"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -17,11 +18,27 @@ func main(){
 		return
 	}
 
-	_,err = initDB(cfg.Database)
+	db,err := initDB(cfg.Database)
 	if err != nil {
 		log.Println(err)
 		return
 	}
+	//
+	//database.InsertCustomer(database.CustomerORM{
+	//	FirstName:    "Fadhlan",
+	//	LastName:     "Hawali",
+	//	NpwpId: "id-1",
+	//	Age:          10,
+	//	CustomerType: "Premium",
+	//	Street:       "Str",
+	//	City:         "Yogya",
+	//	State:        "Indo",
+	//	ZipCode:      "55555",
+	//	PhoneNumber:  "0812384",
+	//},db)
+	//database.GetCustomers(db)
+	//database.DeleteCustomer(1,db)
+	database.UpdateCustomer(database.CustomerORM{PhoneNumber: "0812314"},2,db)
 }
 
 func getConfig() (config.Config, error) {
@@ -48,6 +65,10 @@ func initDB(dbConfig config.Database) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	db.AutoMigrate(
+		&database.CustomerORM{},
+		&database.AccountORM{},
+		)
 
 	log.Println("db successfully connected")
 
