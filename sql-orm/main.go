@@ -38,7 +38,12 @@ func main(){
 	//},db)
 	//database.GetCustomers(db)
 	//database.DeleteCustomer(1,db)
-	database.UpdateCustomer(database.CustomerORM{PhoneNumber: "0812314"},2,db)
+	//database.UpdateCustomer(database.CustomerORM{PhoneNumber: "0812314"},2,db)
+	//
+	//database.InsertAccount(database.AccountORM{
+	//	Balance:         10000,
+	//	AccountType:     "Deposit",
+	//},2,db)
 }
 
 func getConfig() (config.Config, error) {

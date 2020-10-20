@@ -63,3 +63,11 @@ func UpdateCustomer (customer CustomerORM,id int, db *gorm.DB){
 	log.Println("Success update data")
 }
 
+func InsertAccount(account AccountORM, id int, db *gorm.DB){
+	account.IdCustomerRefer = id
+	if err :=  db.Create(&account).Error;err != nil {
+		log.Println("failed to insert :",err.Error())
+		return
+	}
+	log.Println("Success insert data")
+}
