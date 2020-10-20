@@ -1,11 +1,12 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/FadhlanHawali/Digitalent-Kominfo_Introduction-Database-1/sql-generic/config"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 )
 
@@ -16,7 +17,7 @@ func main(){
 		return
 	}
 
-	_,err = connect(cfg.Database)
+	_,err = initDB(cfg.Database)
 	if err != nil {
 		log.Println(err)
 		return
@@ -41,13 +42,14 @@ func getConfig() (config.Config, error) {
 	return cfg, nil
 }
 
-
-func connect(cfg config.Database) (*sql.DB, error) {
-	db, err := sql.Open(cfg.Driver, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s",cfg.User,cfg.Password,cfg.Host,cfg.Port,cfg.DbName,cfg.Config))
+func initDB(dbConfig config.Database) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s", dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.DbName, dbConfig.Config)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
 	log.Println("db successfully connected")
+
 	return db, nil
 }
